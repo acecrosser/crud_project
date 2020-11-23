@@ -1,0 +1,12 @@
+{% extends "app/base.html" %}
+{% block title %}{% endblock %}
+
+{% block content %}
+    <form action="" method="POST" novalidate>
+            {{ form.email.label }}<br>
+            {{ form.email }}<br>
+            {{ form.password.label }}<br>
+            {{ form.password }}<br>
+        <button type="submit" class="btn btn-warning">Регистрация</button>
+    </form>
+{% endblock %}
