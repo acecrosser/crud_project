@@ -1,7 +1,7 @@
 import jwt
 from django.conf import settings
 from django.contrib.auth import user_logged_in
-from django.shortcuts import render
+from django.db import models
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import RetrieveUpdateAPIView
@@ -10,8 +10,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.serializers import jwt_payload_handler
 
-from users.models import User
-from users.serializers import UserSerializers
+from .models import User
+from .serializers import UserSerializers
 
 
 class CreateUserAPIView(APIView):
@@ -52,8 +52,8 @@ def authentication_user(request):
             res = {'error': 'Не получается авторизоваться'}
             return Response(res, status.HTTP_403_FORBIDDEN)
 
-    except KeyError:
-        res = { 'error': 'Введите почту и пароль'}
+    except models.ObjectDoesNotExist:
+        res = {'error': 'Введите корректную почту и пароль'}
         return Response(res)
 
 
@@ -66,7 +66,7 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, *args, **kwargs):
-        serializer_data = request.data.get('user', {})
+        serializer_data = request.data
         serializer = UserSerializers(request.user, data=serializer_data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
