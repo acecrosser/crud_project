@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .view import index, register_user
+from .views import index
+
 
 urlpatterns = [
-    path('', register_user),
+    path('', index),
     path('user/', include(('users.urls', 'users'), namespace='users')),
     path('crud/', include(('crud.urls', 'crud'), namespace='crud')),
     path('admin/', admin.site.urls),
