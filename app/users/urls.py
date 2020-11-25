@@ -1,5 +1,4 @@
 from django.urls import path
-from django.conf.urls import url
 from .views import CreateUserAPIView, authentication_user, UserRetrieveUpdateAPIView
 from django.views.decorators.csrf import csrf_exempt
 

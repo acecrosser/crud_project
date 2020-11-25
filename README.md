@@ -4,6 +4,8 @@
 
 **Задача** - CRUD проект с токен авторизацией. 
 
+ **Requirements:** Django, Django REST, JWT 
+
 **Создать нового пользователя (Обязательный поля для заполнения `email` и `password`):**
 
 `POST http://78.29.38.1:5016/user/create/`
