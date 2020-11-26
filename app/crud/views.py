@@ -1,25 +1,25 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Crud
+import jwt
+from django.conf import settings
+from django.shortcuts import render
+from rest_framework_jwt.serializers import jwt_payload_handler
+
+from .form import UpUser
 from users.models import User
-from users.serializers import UserSerializers
-from .serializers import CrudSerializers
+import json
 
 
-class CrudView(ListCreateAPIView):
-    permission_classes = (AllowAny, )
-    queryset = Crud.objects.all()
-    serializer_class = CrudSerializers
+def index(request):
+    if request.method == 'POST':
+        user = request.POST['username']
+        password = request.POST['password']
+        user = User.objects.get(username=user, password=password)
+        if user:
+            payload = jwt_payload_handler(user)
+            token = jwt.encode(payload, settings.SECRET_KEY)
+            user_details = {}
+            user_details['token'] = token
+            return render(request, 'crud/index.html', {'token': user_details})
+    form = UpUser
+    return render(request, 'crud/index.html', {'form': form})
 
-    def perform_create(self, serializer):
-        user = get_object_or_404(User, id=self.request.data.get('user_id'))
-        return serializer.save(user=user)
 
-
-class SingleCrudeView(RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated, )
-    serializer_class = UserSerializers
-
-    queryset = Crud.objects.all()
-    serializer_class = CrudSerializers

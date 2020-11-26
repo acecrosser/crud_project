@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import CrudView, SingleCrudeView
+from crud.views import index
+
 
 urlpatterns = [
-    path('', CrudView.as_view()),
-    path('<int:pk>', SingleCrudeView.as_view()),
+    path('', index)
 ]

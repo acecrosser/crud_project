@@ -1,10 +1,7 @@
 from django.urls import path
-from .views import CreateUserAPIView, authentication_user, UserRetrieveUpdateAPIView
-from django.views.decorators.csrf import csrf_exempt
-
+from .views import UserRetrieveUpdateAPIView, UsersView
 
 urlpatterns = [
-    path('create/', csrf_exempt(CreateUserAPIView.as_view())),
-    path('take_token/', authentication_user),
-    path('update/', UserRetrieveUpdateAPIView.as_view()),
+    path('', UsersView.as_view()),
+    path('<int:pk>', UserRetrieveUpdateAPIView.as_view()),
 ]

@@ -6,41 +6,42 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 class UserManager(BaseUserManager):
 
-    def _create_user(self, email, password, **plus_fields):
-        if not email:
-            raise ValueError('Электронная почта должна быть указана')
+    def _create_user(self, username, password, **plus_fields):
+        if not username:
+            raise ValueError('Введите имя')
         try:
             with transaction.atomic():
-                user = self.model(email=email, **plus_fields)
+                user = self.model(username=username, **plus_fields)
                 user.set_password(password)
                 user.save(using=self._db)
                 return user
         except:
             raise
 
-    def create_user(self, email, password=None, **plus_fields):
-        plus_fields.setdefault('is_staff', False)
-        plus_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, **plus_fields)
-
-    def create_superuser(self, email, password, **plus_fields):
+    def create_user(self, username, password, **plus_fields):
         plus_fields.setdefault('is_staff', True)
         plus_fields.setdefault('is_superuser', True)
-        return self._create_user(email, password=password, **plus_fields)
+        return self._create_user(username, password=password, **plus_fields)
+
+    def create_superuser(self, username, password, **plus_fields):
+        plus_fields.setdefault('is_staff', True)
+        plus_fields.setdefault('is_superuser', True)
+        return self._create_user(username, password=password, **plus_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    email = models.EmailField(max_length=140, unique=True)
-    first_name = models.CharField(max_length=50, blank=True)
-    last_name = models.CharField(max_length=50, blank=True)
+    username = models.CharField(max_length=150, unique=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     data_create = models.DateTimeField(default=timezone.now)
+    last_login = models.DateTimeField(default=timezone.now)
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def save(self, *args, **kwargs):
