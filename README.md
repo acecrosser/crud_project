@@ -2,82 +2,49 @@
 
 ### Тестовое задание. 
 
-**Задача** - CRUD проект с токен авторизацией. 
+http://78.29.38.1:5016/swagger/
 
- **Requirements:** Django, Django REST, JWT 
+Для того, чтобы развернуть данное решение на локальное машине, потребуется осуществить следующие действия: 
 
-**Создать нового пользователя (Обязательный поля для заполнения `email` и `password`):**
+Клонируем репозитория:
 
-`POST http://78.29.38.1:5016/user/create/`
-```
-JSON:
+`git clone https://github.com/acecrosser/crud_project.git`
 
-{
-    "email": "yoursmail@mail.com",
-    "password": "yourspassword",
-    "first_name": "Name",
-    "last_name": "Last Name"
-}
-```
-Ответ сервера: `STAUS 201 Created`
-```
+Переходим в созданную папку проекта:
 
-{
-    "id": 14,
-    "email": "yoursmail@mail.com",
-    "first_name": "Name",
-    "last_name": "Last Name",
-    "data_create": "2020-11-25T06:42:16.373942Z"
-}
-```
-**Запросить токен авторизации (Обязательный поля для заполнения `email` и `password`):**
+`cd crud_project`
 
-`POST http://78.29.38.1:5016/user/take_token/`
-```
-JSON:
+Создаем виртуальное окружение Python:
 
-{
-    "email": "yoursmail@mail.com",
-    "password": "yourspassword"
-}
-```
-Ответ сервера: `STAUS 200 OK`
-```
-{
-    "name": "Name Last Name",
-    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNCwidXNlcm5hbWUiOiJ5b3Vyc21haWxAbWFpbC5jb20iLCJleHAiOjE2MDYyODcwOTIsImVtYWlsIjoieW91cnNtYWlsQG1haWwuY29tIn0.PFozxj10yzUpYTZLSIpgs3YhWSL8XLbeNYmn4-iEbvs"
-}
-```
-**Создать пост:**
+`python -m venv env` *(после создения появиться папка env)*
 
-В заголовке Headers указывается дополнительный параметр `Authorization`, где вписываем наш полученный токен 
-`CRUD yourtoken`
+Активируем виртуальное окружение:
 
-`POST http://78.29.38.1:5016/crud/`
-```
-JSON:
+Windows: `cd env\Scripts\` > `activate`
+Linux: `source env/bin/activate`
 
-{
-    "title": "Your title",
-    "body": "body message",
-    "user_id": 14
-}
-```
-Ответ сервера: `STAUS 201 Created`
-```
-{
-    "id": 4,
-    "title": "Your title",
-    "body": "body message",
-    "user_id": 14,
-    "date": "2020-11-25T06:56:12.292380Z"
-}
-```
+Обновляем pip:
 
-Остальные доступные интерфейсы: 
-```
-GET http://78.29.38.1:5016/crud/ - Выдаст список всех созданных постов (не требует авторизации)
-DELET http://78.29.38.1:5016/crud/id_post - Удалит выбранный пост по его номеру id (авторизация обязательна)
-PUT http://78.29.38.1:5016/crud/id_post - Внести изменения в созданный пост (авторизация обязательна)
-PUT http://78.29.38.1:5016/user/update - Внести изменения в данные пользователя (авторизация обязательна)
-```
+`pip install --upgrade pip`
+
+Устанавливаем все необходимые зависимости из файла requirements.txt
+
+`pip install -r requirements.txt`
+
+Переходим в папку app/ и создаем правила миграци моделей:
+
+`cd app/` > `python manage.py makemigrations users`
+
+Делаем миграцию моделей:
+
+`python manage.py migrate`
+
+Создаем суперпользователя:
+
+`python manage.py createsuperuser`
+
+Запускаем проект:
+
+`python manage.py runserver`
+
+Переходим на страницу http://127.0.0.1:8000/swagger/
