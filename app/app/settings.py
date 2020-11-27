@@ -132,6 +132,7 @@ SWAGGER_SETTINGS = {
             'type': 'apiKey',
             'in': 'header',
             'name': 'Authorization',
+            'description': 'INPUT EXAMPLE: Crud 958e8ddf33cc24e6108f996aa964dda790ba01c2...'
         },
     },
 }
