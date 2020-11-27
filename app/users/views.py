@@ -3,6 +3,7 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIV
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from .models import User
 from .serializers import UserSerializers
@@ -21,7 +22,8 @@ class CreateUserAPIView(APIView):
 
 
 class UsersView(ListCreateAPIView):
-    permission_classes = (IsAuthenticated, )
+
+    permission_classes = (AllowAny, )
 
     queryset = User.objects.all()
     serializer_class = UserSerializers
@@ -29,6 +31,7 @@ class UsersView(ListCreateAPIView):
 
 class UpdateUserAPIView(APIView):
 
+    authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated, )
 
     def put(self, request, pk):
@@ -46,6 +49,7 @@ class UpdateUserAPIView(APIView):
 
 class DeleteUserAPIView(APIView):
 
+    authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated, )
 
     def delete(self, request, pk):
@@ -63,6 +67,8 @@ class DeleteUserAPIView(APIView):
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateDestroyAPIView):
+
+    authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated, )
 
     queryset = User.objects.all()

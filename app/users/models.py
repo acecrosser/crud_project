@@ -1,32 +1,8 @@
 from __future__ import unicode_literals
-from django.db import models, transaction
+from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-
-
-class UserManager(BaseUserManager):
-
-    def _create_user(self, username, password, **plus_fields):
-        if not username:
-            raise ValueError('Введите имя')
-        try:
-            with transaction.atomic():
-                user = self.model(username=username, **plus_fields)
-                user.set_password(password)
-                user.save(using=self._db)
-                return user
-        except:
-            raise
-
-    def create_user(self, username, password, **plus_fields):
-        plus_fields.setdefault('is_staff', True)
-        plus_fields.setdefault('is_superuser', True)
-        return self._create_user(username, password=password, **plus_fields)
-
-    def create_superuser(self, username, password, **plus_fields):
-        plus_fields.setdefault('is_staff', True)
-        plus_fields.setdefault('is_superuser', True)
-        return self._create_user(username, password=password, **plus_fields)
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
