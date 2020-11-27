@@ -9,6 +9,7 @@ from .models import User
 from .serializers import UserSerializers
 
 
+# пример реализации через класс APIView
 class CreateUserAPIView(APIView):
 
     permission_classes = (AllowAny, )
@@ -29,6 +30,7 @@ class UsersView(ListCreateAPIView):
     serializer_class = UserSerializers
 
 
+# пример реализации через класс APIView + авторизация
 class UpdateUserAPIView(APIView):
 
     authentication_classes = (JSONWebTokenAuthentication,)
@@ -66,6 +68,7 @@ class DeleteUserAPIView(APIView):
         return Response(res, status.HTTP_403_FORBIDDEN)
 
 
+# Класс с встроенной реализацией GET, PUT, PATCH, DELETE
 class UserRetrieveUpdateAPIView(RetrieveUpdateDestroyAPIView):
 
     authentication_classes = (JSONWebTokenAuthentication,)
