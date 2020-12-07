@@ -34,11 +34,7 @@ Linux: `source env/bin/activate`
 
 `pip install -r requirements.txt`
 
-**Переходим в папку app/ и создаем правила миграци моделей:**
-
-`cd app/` > `python manage.py makemigrations users`
-
-**Делаем миграцию моделей:**
+**Переходим в папку /app и делаем миграцию моделей:**
 
 `python manage.py migrate`
 
