@@ -18,23 +18,18 @@ class TakeTokenAuthAPI(ObtainAuthToken):
         try:
             username = request.data['username']
             password = request.data['password']
-            user = User.objects.get(username=username, password=password)
-            if user:
-                try:
-                    payload = jwt_payload_handler(user)
-                    token = jwt.encode(payload, settings.SECRET_KEY)
-                    user_details = {}
-                    user_details['token'] = token
-                    user_logged_in.send(sender=user.__class__, request=request, user=user)
-                    return Response(user_details, status=status.HTTP_200_OK)
-
-                except Exception as err:
-                    raise err
-
+            user = User.objects.get(username=username)
+            if user.check_password(password):
+                payload = jwt_payload_handler(user)
+                token = jwt.encode(payload, settings.SECRET_KEY)
+                user_details = {}
+                user_details['token'] = token
+                user_logged_in.send(sender=user.__class__, request=request, user=user)
+                return Response(user_details, status=status.HTTP_200_OK)
             else:
                 res = {'error': 'Не получается авторизоваться'}
                 return Response(res, status.HTTP_403_FORBIDDEN)
 
         except ObjectDoesNotExist:
-            res = {'error': 'Введите корректную почту и пароль'}
+            res = {'error': 'Введите корректную почту или пароль'}
             return Response(res)

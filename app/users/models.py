@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
-
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models, transaction
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.hashers import make_password
 
 
 class UserManager(BaseUserManager):
@@ -14,7 +14,9 @@ class UserManager(BaseUserManager):
         try:
             with transaction.atomic():
                 user = self.model(username=username, **plus_fields)
-                user.set_password(password)
+                hash_password = make_password(password)
+                print(hash_password)
+                user.set_password(hash_password)
                 user.save(using=self._db)
                 return user
         except:

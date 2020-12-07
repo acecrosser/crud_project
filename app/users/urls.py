@@ -1,7 +1,6 @@
-from django.urls import path
-from .views import UserRetrieveUpdateAPIView, UsersView
+from .views import UsersViewSet
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path('', UsersView.as_view()),
-    path('<int:pk>', UserRetrieveUpdateAPIView.as_view()),
-]
+router = DefaultRouter()
+router.register(r'users', UsersViewSet, basename='user')
+urlpatterns = router.urls
